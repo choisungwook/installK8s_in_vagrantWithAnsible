@@ -1,0 +1,17 @@
+---
+- hosts: master
+  become: true
+  tasks:
+    - name: Install npm
+      apt: 
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+        - npm
+        - make
+
+    - name: install node 
+      shell: |
+        curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - && sudo apt-get install -y nodejs

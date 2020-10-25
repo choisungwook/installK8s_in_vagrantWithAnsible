@@ -89,6 +89,9 @@
         daemon_reload: yes
         state: restarted
 
+    - name: pull kubeadm images
+      command: kubeadm config images pull
+
     - name: Initialize the Kubernetes cluster using kubeadm
       command: kubeadm init --apiserver-advertise-address="172.16.10.10" --apiserver-cert-extra-sans="172.16.10.10" --node-name master --pod-network-cidr=192.168.0.0/16
 
@@ -101,6 +104,8 @@
 
     - name: Install calico pod network
       become: false
+      retries: 3
+      delay: 3
       command: kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 
     - name: Generate join command
